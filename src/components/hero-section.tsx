@@ -3,11 +3,11 @@ import Spline from '@splinetool/react-spline'
 
 export function HeroSection() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-background to-slate-50 dark:from-background dark:to-slate-900/50">
+    <section className="w-full py-8 md:py-16 lg:py-24 xl:py-32 bg-gradient-to-b from-background to-slate-50 dark:from-background dark:to-slate-900/50">
       <div className="container px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
           <div className="flex flex-col justify-center space-y-4">
-            <div className="w-full h-[350px] mb-8">
+            <div className="w-full h-[300px] mb-4">
               <Spline scene="https://prod.spline.design/DCIGLjNkK1-ZsfER/scene.splinecode" />
             </div>
             <div className="space-y-2">
@@ -32,7 +32,7 @@ export function HeroSection() {
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[500px] overflow-hidden rounded-lg bg-gradient-to-br from-primary/20 to-indigo-500/20 p-4">
+            <div className="relative w-full h-[250px] sm:h-[300px] lg:h-[400px] overflow-hidden rounded-lg bg-gradient-to-br from-primary/20 to-indigo-500/20 p-4">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-full max-w-sm p-4 bg-card dark:bg-gray-950/90 rounded-lg shadow-lg">
                   <div className="space-y-2 mb-4">
