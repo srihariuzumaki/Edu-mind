@@ -1,14 +1,14 @@
-
 import './App.css'
-
+import { LandingPage } from "./components/landing-page"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 function App() {
- 
-
   return (
-    <>
-      <h1>Edu Mind</h1>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    </Router>
   )
 }
 
