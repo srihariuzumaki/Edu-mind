@@ -5,8 +5,11 @@ import { MainNav } from "@/components/main-nav"
 import { HeroSection } from "@/components/hero-section"
 import { Footer } from "@/components/footer"
 import { Brain, BookOpen, BarChart, Users, Award, Globe } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export function LandingPage() {
+  const navigate = useNavigate()
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -18,7 +21,7 @@ export function LandingPage() {
         {/* Features Section */}
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
-            <h2 className="text-3xl font-bold leading-[1.1] tracking-tighter sm:text-3xl md:text-5xl">
+            <h2 className="text-3xl font-bold leading-[1.1] tracking-tighter text-foreground sm:text-3xl md:text-5xl">
               Personalized Learning Experience
             </h2>
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
@@ -61,17 +64,21 @@ export function LandingPage() {
         </section>
 
         {/* AI Tutor Section */}
-        <section className="container py-12 md:py-24 lg:py-32 bg-slate-50 dark:bg-slate-900">
+        <section className="container py-12 md:py-24 lg:py-32 bg-muted/50 dark:bg-slate-900">
           <div className="mx-auto grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Meet Your AI Tutor</h2>
+                <h2 className="text-3xl font-bold tracking-tighter text-foreground sm:text-4xl md:text-5xl">Meet Your AI Tutor</h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Get personalized help whenever you need it with our advanced AI tutoring system
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button size="lg" className="px-8">
+                <Button 
+                  size="lg" 
+                  className="px-8"
+                  onClick={() => navigate('/ai-tutor')}
+                >
                   Try AI Tutor
                 </Button>
                 <Button size="lg" variant="outline" className="px-8">
@@ -86,9 +93,9 @@ export function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="container py-12 md:py-24 lg:py-32 bg-primary/5">
+        <section className="container py-12 md:py-24 lg:py-32 bg-muted/20">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
-            <h2 className="text-3xl font-bold leading-[1.1] tracking-tighter sm:text-3xl md:text-5xl">
+            <h2 className="text-3xl font-bold leading-[1.1] tracking-tighter text-foreground sm:text-3xl md:text-5xl">
               Ready to Transform Your Learning?
             </h2>
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
