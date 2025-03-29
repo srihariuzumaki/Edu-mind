@@ -39,7 +39,7 @@ export function MainNav() {
   const userInitials = user?.email?.split('@')[0].slice(0, 2).toUpperCase() || '?'
 
   return (
-    <div className="container flex h-16 items-center justify-between bg-blue-50 dark:bg-blue-950/20 p-[15px]">
+    <div className="container flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center gap-6 md:gap-10">
         <a href="/" className="flex items-center space-x-2">
           <span className="font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-500">
@@ -50,12 +50,6 @@ export function MainNav() {
           <nav className="hidden md:flex gap-6">
             <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
               Features
-            </a>
-            <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
-              Courses
-            </a>
-            <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
-              Community
             </a>
           </nav>
         )}
@@ -115,12 +109,6 @@ export function MainNav() {
               <>
                 <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
                   Features
-                </a>
-                <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
-                  Courses
-                </a>
-                <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
-                  Community
                 </a>
               </>
             )}

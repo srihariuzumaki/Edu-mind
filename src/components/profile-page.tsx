@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useTheme } from "@/lib/theme"
 import { MainNav } from "@/components/main-nav"
-import { Footer } from "@/components/footer"
+
 
 export function ProfilePage() {
   const [profileImage, setProfileImage] = useState<string | null>(null)
@@ -213,7 +213,7 @@ export function ProfilePage() {
                         <SelectContent>
                           <SelectItem value="light">Light</SelectItem>
                           <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="system">System</SelectItem>
+                          
                         </SelectContent>
                       </Select>
                     </div>
@@ -280,7 +280,7 @@ export function ProfilePage() {
           </Tabs>
         </div>
       </main>
-      <Footer />
+      
     </div>
   )
 } 
