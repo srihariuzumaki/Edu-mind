@@ -12,6 +12,7 @@ import { ResetPasswordPage } from "./components/reset-password-page"
 import { SettingsPage } from "./components/settings-page"
 import { NotFoundPage } from "./components/not-found-page"
 import { Footer } from "./components/footer"
+import { AITutorPage } from "./pages/ai-tutor"
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -53,6 +54,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/ai-tutor"
+              element={
+                <PrivateRoute>
+                  <AITutorPage />
                 </PrivateRoute>
               }
             />
