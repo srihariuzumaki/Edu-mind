@@ -9,6 +9,7 @@ export interface UserData {
   displayName?: string;
   createdAt: Date;
   lastLogin: Date;
+  role?: 'admin' | 'teacher' | 'student';
   preferences?: {
     theme?: 'light' | 'dark';
     notifications?: boolean;
@@ -22,6 +23,7 @@ export async function createUserDocument(user: User) {
     displayName: user.displayName || undefined,
     createdAt: new Date(),
     lastLogin: new Date(),
+    role: 'student', // Default role for new users
     preferences: {
       theme: 'dark',
       notifications: true

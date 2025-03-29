@@ -6,7 +6,8 @@ const firebaseConfig = {
   projectId: "edu-mind-418c5",
   storageBucket: "edu-mind-418c5.firebasestorage.app",
   messagingSenderId: "554484710962",
-  appId: "1:554484710962:web:591c5a50207812de03862b"
+  appId: "1:554484710962:web:591c5a50207812de03862b",
+  databaseURL: "https://edu-mind-418c5.firebaseio.com"
 };
 
 export const app = initializeApp(firebaseConfig); 

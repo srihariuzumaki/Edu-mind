@@ -15,12 +15,16 @@ import { createUserDocument, getUserData, updateUserLastLogin, UserData } from '
 interface AuthContextType {
   user: User | null;
   userData: UserData | null;
+  isAuthenticated: boolean;
   isLoading: boolean;
   isAuthInitialized: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, password: string) => Promise<void>;
+  updatePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -103,8 +107,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const value: AuthContextType = {
+    user,
+    userData,
+    isAuthenticated: !!user,
+    isLoading,
+    isAuthInitialized,
+    signIn,
+    signUp,
+    signInWithGoogle,
+    logout,
+    forgotPassword: async (email: string) => {
+      // Implementation
+    },
+    resetPassword: async (token: string, password: string) => {
+      // Implementation
+    },
+    updatePassword: async (currentPassword: string, newPassword: string) => {
+      // Implementation
+    },
+  };
+
   return (
-    <AuthContext.Provider value={{ user, userData, isLoading, isAuthInitialized, signIn, signUp, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

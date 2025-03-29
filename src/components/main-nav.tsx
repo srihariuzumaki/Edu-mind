@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X, User, LogOut } from "lucide-react"
+import { Menu, X, User, LogOut, Settings } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "@/lib/auth"
@@ -20,13 +20,15 @@ export function MainNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const { user, logout } = useAuth()
+  const { user, userData, logout } = useAuth()
   const isAITutorPage = location.pathname === "/ai-tutor"
+  const isProfilePage = location.pathname === "/profile"
+  const isAdminPage = location.pathname.startsWith("/admin")
 
   const handleLogout = async () => {
     try {
       await logout()
-      if (isAITutorPage) {
+      if (isAITutorPage || isAdminPage) {
         navigate('/')
       }
     } catch (error) {
@@ -44,7 +46,7 @@ export function MainNav() {
             EduMind
           </span>
         </a>
-        {!isAITutorPage && (
+        {!isAITutorPage && !isProfilePage && !isAdminPage && (
           <nav className="hidden md:flex gap-6">
             <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
               Features
@@ -59,13 +61,13 @@ export function MainNav() {
         )}
       </div>
       <div className="hidden md:flex items-center gap-4">
-        <ThemeToggle />
+        {!isProfilePage && <ThemeToggle />}
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user.photoURL || undefined} alt={user.email || ''} />
+                  <AvatarImage src={`https://avatar.vercel.sh/${user.email}`} alt={user.email || ""} />
                   <AvatarFallback>{userInitials}</AvatarFallback>
                 </Avatar>
               </Button>
@@ -74,9 +76,6 @@ export function MainNav() {
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{user.email}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user.displayName || 'User'}
-                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -84,6 +83,13 @@ export function MainNav() {
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
+              {userData?.role === "admin" && (
+                <DropdownMenuItem onClick={() => navigate('/admin')}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Admin Panel</span>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
@@ -105,7 +111,7 @@ export function MainNav() {
       {isMenuOpen && (
         <div className="absolute top-16 left-0 right-0 bg-background border-b p-4 md:hidden">
           <nav className="flex flex-col space-y-4">
-            {!isAITutorPage && (
+            {!isAITutorPage && !isProfilePage && !isAdminPage && (
               <>
                 <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
                   Features
@@ -119,15 +125,17 @@ export function MainNav() {
               </>
             )}
             <div className="flex flex-col gap-2 pt-2">
-              <div className="flex items-center mb-2">
-                <ThemeToggle />
-                <span className="ml-2 text-sm">Toggle theme</span>
-              </div>
+              {!isProfilePage && (
+                <div className="flex items-center mb-2">
+                  <ThemeToggle />
+                  <span className="ml-2 text-sm">Toggle theme</span>
+                </div>
+              )}
               {user ? (
                 <>
                   <div className="flex items-center space-x-2 p-2">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.photoURL || undefined} alt={user.email || ''} />
+                      <AvatarImage src={`https://avatar.vercel.sh/${user.email}`} alt={user.email || ""} />
                       <AvatarFallback>{userInitials}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
