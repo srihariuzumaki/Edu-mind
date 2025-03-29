@@ -201,13 +201,13 @@ export function AITutorPage() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <MainNav />
       </header>
-      <main className="flex-1 flex items-center justify-center py-8">
-        <div className="container max-w-4xl">
-          <h1 className="text-3xl font-bold mb-8 text-center">AI Tutor</h1>
-          <Card className="w-full border-2">
+      <main className="flex-1 flex items-center justify-center py-4">
+        <div className="container max-w-4xl h-[calc(100vh-4rem)]">
+          <h1 className="text-3xl font-bold mb-4 text-center">AI Tutor</h1>
+          <Card className="w-full border-2 h-[calc(100%-4rem)] flex flex-col">
             <CardHeader className="flex flex-row items-center gap-4 p-4 border-b">
               <Avatar className="h-10 w-10">
-                <AvatarImage src="/placeholder.svg?height=40&width=40" alt="AI Tutor" />
+                <AvatarImage src="/bot-avatar.svg" alt="AI Tutor" />
                 <AvatarFallback className="bg-primary/20 text-primary">AI</AvatarFallback>
               </Avatar>
               <div>
@@ -215,7 +215,7 @@ export function AITutorPage() {
                 <p className="text-xs text-muted-foreground">Always here to help</p>
               </div>
             </CardHeader>
-            <CardContent className="p-4 space-y-4 h-[500px] overflow-y-auto">
+            <CardContent className="p-4 space-y-4 flex-1 overflow-y-auto">
               {messages.map((message, index) => (
                 <div
                   key={index}
@@ -223,6 +223,7 @@ export function AITutorPage() {
                 >
                   {!message.isUser && (
                     <Avatar className="h-8 w-8">
+                      <AvatarImage src="/bot-avatar.svg" alt="AI Tutor" />
                       <AvatarFallback className="bg-primary/20 text-primary">AI</AvatarFallback>
                     </Avatar>
                   )}
@@ -239,7 +240,7 @@ export function AITutorPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="mt-0 flex-shrink-0 hover:bg-primary/10"
+                          className="mt-0 flex-shrink-0 bg-black dark:bg-white hover:bg-black/80 dark:hover:bg-white/80"
                           onClick={() => {
                             console.log("Audio URL:", message.audioUrl);
                             if (message.audioUrl) {
@@ -250,9 +251,9 @@ export function AITutorPage() {
                           }}
                         >
                           {isPlaying && currentPlayingMessageId === index ? (
-                            <VolumeX className="h-4 w-4" />
+                            <VolumeX className="h-4 w-4 text-white dark:text-black" />
                           ) : (
-                            <Mic className="h-4 w-4" />
+                            <Mic className="h-4 w-4 text-white dark:text-black" />
                           )}
                         </Button>
                       )}
@@ -260,7 +261,8 @@ export function AITutorPage() {
                   </div>
                   {message.isUser && (
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback>U</AvatarFallback>
+                      <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'} />
+                      <AvatarFallback>{user?.displayName?.[0] || 'U'}</AvatarFallback>
                     </Avatar>
                   )}
                 </div>
