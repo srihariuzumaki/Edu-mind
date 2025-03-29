@@ -2,10 +2,19 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { Menu, X, User, LogOut } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "@/lib/auth"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export function MainNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,6 +33,8 @@ export function MainNav() {
       console.error('Error logging out:', error)
     }
   }
+
+  const userInitials = user?.email?.split('@')[0].slice(0, 2).toUpperCase() || '?'
 
   return (
     <div className="container flex h-16 items-center justify-between bg-blue-50 dark:bg-blue-950/20 p-[15px]">
@@ -47,12 +58,38 @@ export function MainNav() {
           </nav>
         )}
       </div>
-      <div className="hidden md:flex gap-4">
+      <div className="hidden md:flex items-center gap-4">
         <ThemeToggle />
         {user ? (
-          <Button variant="outline" size="sm" className="bg-white hover:bg-gray-100" onClick={handleLogout}>
-            Log Out
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.photoURL || undefined} alt={user.email || ''} />
+                  <AvatarFallback>{userInitials}</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{user.email}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user.displayName || 'User'}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate('/profile')}>
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <>
             <Button variant="outline" size="sm" className="bg-black text-white hover:bg-gray-800" onClick={() => navigate('/login')}>
@@ -87,9 +124,22 @@ export function MainNav() {
                 <span className="ml-2 text-sm">Toggle theme</span>
               </div>
               {user ? (
-                <Button variant="ghost" size="sm" className="justify-start" onClick={handleLogout}>
-                  Log Out
-                </Button>
+                <>
+                  <div className="flex items-center space-x-2 p-2">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.photoURL || undefined} alt={user.email || ''} />
+                      <AvatarFallback>{userInitials}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{user.email}</span>
+                      <span className="text-xs text-muted-foreground">{user.displayName || 'User'}</span>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm" className="justify-start" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log Out
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button variant="ghost" size="sm" className="justify-start" onClick={() => navigate('/login')}>
