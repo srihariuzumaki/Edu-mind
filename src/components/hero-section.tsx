@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+
 
 export function HeroSection() {
-  const navigate = useNavigate();
+  
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-white to-slate-50 dark:from-background dark:to-slate-900/50">
@@ -19,7 +19,7 @@ export function HeroSection() {
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg" className="px-8" onClick={() => navigate('/landing')}>
+              <Button size="lg" className="px-8">  
                 Get Started
               </Button>
               <a
