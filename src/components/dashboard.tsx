@@ -14,14 +14,14 @@ import {
   LayoutDashboard,
   Book,
   FileCheck,
-  Settings,
   Sun,
   Moon,
   User,
   X
 } from "lucide-react"
-import { CourseManagement } from "./admin/course-management"
-import { LessonManagement } from "./admin/lesson-management"
+import { CourseSection } from "./user/course-section"
+import { LessonSection } from "./user/lesson-section"
+import { QuizSection } from "./user/quiz-section"
 import { useTheme } from "next-themes"
 
 // Mock data for dashboard overview
@@ -128,14 +128,8 @@ export function Dashboard() {
             <FileCheck className="mr-2 h-4 w-4" />
             Quizzes
           </Button>
-          <Button 
-            variant={activeTab === "settings" ? "secondary" : "ghost"} 
-            className="w-full justify-start dark:bg-black dark:text-white dark:hover:bg-black/80"
-            onClick={() => setActiveTab("settings")}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            Settings
-          </Button>
+         
+          
         </nav>
       </div>
 
@@ -217,17 +211,15 @@ export function Dashboard() {
                     </TabsList>
 
                     <TabsContent value="courses">
-                      <CourseManagement />
+                      <CourseSection />
                     </TabsContent>
 
                     <TabsContent value="lessons">
-                      <LessonManagement />
+                      <LessonSection />
                     </TabsContent>
 
                     <TabsContent value="quizzes">
-                      <div className="text-center text-muted-foreground">
-                        Quiz management coming soon...
-                      </div>
+                      <QuizSection />
                     </TabsContent>
                   </Tabs>
                 </CardContent>
@@ -235,13 +227,9 @@ export function Dashboard() {
             </>
           )}
 
-          {activeTab === "courses" && <CourseManagement />}
-          {activeTab === "lessons" && <LessonManagement />}
-          {activeTab === "quizzes" && (
-            <div className="text-center text-muted-foreground">
-              Quiz management coming soon...
-            </div>
-          )}
+          {activeTab === "courses" && <CourseSection />}
+          {activeTab === "lessons" && <LessonSection />}
+          {activeTab === "quizzes" && <QuizSection />}
           {activeTab === "settings" && (
             <div className="text-center text-muted-foreground">
               Settings page coming soon...
