@@ -39,7 +39,7 @@ export function MainNav() {
   const userInitials = user?.email?.split('@')[0].slice(0, 2).toUpperCase() || '?'
 
   return (
-    <div className="container flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className={`container flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300 ease-in-out ${isMenuOpen ? 'md:ml-8' : ''}`}>
       <div className="flex items-center gap-6 md:gap-10">
         <a href="/" className="flex items-center space-x-2">
           <span className="font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-500">
@@ -99,11 +99,22 @@ export function MainNav() {
           </>
         )}
       </div>
-      <button className="flex items-center space-x-2 md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-        {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      <button 
+        className="flex items-center space-x-2 md:hidden" 
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+      >
+        {isMenuOpen ? (
+          <X className="h-6 w-6 cursor-pointer" />
+        ) : (
+          <Menu className="h-6 w-6 cursor-pointer" />
+        )}
       </button>
       {isMenuOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-background border-b p-4 md:hidden">
+        <div 
+          className="fixed top-16 left-0 right-0 bg-background border-b p-4 md:hidden z-50"
+          onClick={(e) => e.stopPropagation()}
+        >
           <nav className="flex flex-col space-y-4">
             {!isAITutorPage && !isProfilePage && !isAdminPage && (
               <>

@@ -17,7 +17,8 @@ import {
   Settings,
   Sun,
   Moon,
-  User
+  User,
+  X
 } from "lucide-react"
 import { CourseManagement } from "./admin/course-management"
 import { LessonManagement } from "./admin/lesson-management"
@@ -39,23 +40,25 @@ export function Dashboard() {
   return (
     <div className="flex min-h-screen bg-background">
       {/* Top Navigation Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-card">
-        <div className="flex h-full items-center justify-between px-6">
+      <div className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex h-full items-center justify-between px-4">
           <div className="flex items-center gap-4">
             <Button 
               variant="ghost" 
               size="icon" 
-              onClick={() => setIsSidebarOpen(true)}
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="dark:bg-black dark:text-white dark:hover:bg-black/80"
             >
-              <Menu className="h-6 w-6" />
+              {isSidebarOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              EduMind
-            </h1>
+            <h1 className="text-xl font-bold">EduMind</h1>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Button
               variant="ghost"
               size="icon"
@@ -82,16 +85,14 @@ export function Dashboard() {
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-40 w-64 transform bg-card shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-16 items-center justify-between border-b px-4">
-          <h2 className="text-lg font-semibold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            EduMind
-          </h2>
+          <h2 className="text-lg font-semibold">EduMind</h2>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setIsSidebarOpen(false)}
             className="dark:bg-black dark:text-white dark:hover:bg-black/80"
           >
-            <Menu className="h-6 w-6" />
+            <X className="h-6 w-6" />
           </Button>
         </div>
         <nav className="space-y-1 p-4">
