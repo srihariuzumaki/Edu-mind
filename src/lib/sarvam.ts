@@ -3,6 +3,11 @@ import axios from 'axios';
 const SARVAM_API_KEY = import.meta.env.VITE_SARVAM_API_KEY;
 const SARVAM_API_URL = 'https://api.sarvam.ai';
 
+// Add API key validation
+if (!SARVAM_API_KEY) {
+  console.error('Sarvam API key is missing. Please add VITE_SARVAM_API_KEY to your .env file');
+}
+
 export interface TextToSpeechOptions {
   targetLanguageCode: string;
   speaker?: string;
@@ -13,6 +18,15 @@ export interface TextToSpeechOptions {
 
 export async function textToSpeech(text: string, options: TextToSpeechOptions): Promise<string> {
   try {
+    if (!SARVAM_API_KEY) {
+      throw new Error('Sarvam API key is missing');
+    }
+
+    console.log("Starting text-to-speech process...");
+    console.log("Text length:", text.length);
+    console.log("Target language:", options.targetLanguageCode);
+    console.log("Speaker:", options.speaker);
+
     const response = await axios.post<{ audios: string[] }>(
       `${SARVAM_API_URL}/text-to-speech`,
       {
@@ -22,7 +36,8 @@ export async function textToSpeech(text: string, options: TextToSpeechOptions): 
         pitch: options.pitch || 0,
         pace: options.pace || 1.0,
         loudness: options.loudness || 1.0,
-        model: 'bulbul:v1'
+        model: 'bulbul:v1',
+        speech_sample_rate: 22050
       },
       {
         headers: {
@@ -32,9 +47,21 @@ export async function textToSpeech(text: string, options: TextToSpeechOptions): 
       }
     );
 
+    if (!response.data.audios?.[0]) {
+      throw new Error('No audio data received from the server');
+    }
+
+    console.log("Received audio data length:", response.data.audios[0].length);
     return response.data.audios[0];
   } catch (error) {
-    console.error('Error converting text to speech:', error);
+    console.error('Error in text-to-speech process:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('Response data:', error.response?.data);
+      console.error('Response status:', error.response?.status);
+      if (error.response?.status === 403) {
+        throw new Error('Invalid or missing Sarvam API key. Please check your .env file.');
+      }
+    }
     throw new Error('Failed to convert text to speech');
   }
 }

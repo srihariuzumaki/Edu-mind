@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { SendHorizontal, Volume2, VolumeX } from "lucide-react"
+import { SendHorizontal, VolumeX, Mic } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { getAIResponse } from "@/lib/gemini"
 import { useAuth } from "@/lib/auth"
@@ -49,6 +49,7 @@ export function AITutorPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [currentPlayingMessageId, setCurrentPlayingMessageId] = useState<number | null>(null);
 
   // Count user messages (excluding the initial greeting)
   const userMessageCount = messages.filter(msg => msg.isUser).length
@@ -93,29 +94,50 @@ export function AITutorPage() {
         content: msg.content,
       }))
 
+      // Add language preference to the user's message
+      const languagePrompt = selectedLanguage !== 'en-IN' 
+        ? `Please respond in ${SUPPORTED_LANGUAGES.find(lang => lang.code === selectedLanguage)?.name || 'the selected language'}.`
+        : '';
+
       // Get AI response
-      const aiResponse = await getAIResponse(input, chatHistory)
+      const aiResponse = await getAIResponse(`${languagePrompt} ${input}`, chatHistory)
 
       let audioUrl: string | undefined;
       
       // Try to convert to speech, but don't block the AI response if it fails
       try {
+        console.log("Starting text-to-speech conversion...");
+        console.log("Selected language:", selectedLanguage);
+        console.log("Selected speaker:", selectedSpeaker);
+        console.log("Text to convert:", aiResponse);
+        
         const audioOptions: TextToSpeechOptions = {
           targetLanguageCode: selectedLanguage,
           speaker: selectedSpeaker,
         }
+        console.log("TTS Options:", audioOptions);
+        
         const audioBase64 = await textToSpeech(aiResponse, audioOptions)
+        console.log("Received audio base64 data length:", audioBase64?.length);
+        console.log("First 50 chars of audio data:", audioBase64?.substring(0, 50) + "...");
+        
         audioUrl = `data:audio/wav;base64,${audioBase64}`
+        console.log("Audio URL created successfully");
       } catch (error) {
-        console.error("Text-to-speech conversion failed:", error)
+        console.error("Text-to-speech conversion failed:", error);
+        if (error instanceof Error) {
+          console.error("Error details:", error.message);
+          console.error("Error stack:", error.stack);
+        }
         // Don't throw the error, just continue without audio
       }
 
+      console.log("Creating AI message with audio URL:", audioUrl ? "present" : "absent");
       const aiMessage: Message = {
         content: aiResponse,
         isUser: false,
         timestamp: new Date(),
-        audioUrl, // This will be undefined if text-to-speech failed
+        audioUrl,
       }
 
       setMessages((prev) => [...prev, aiMessage])
@@ -132,19 +154,45 @@ export function AITutorPage() {
     }
   }
 
-  const handlePlayAudio = (audioUrl: string) => {
+  const handlePlayAudio = (audioUrl: string, messageId: number) => {
     if (audioRef.current) {
-      audioRef.current.src = audioUrl
-      audioRef.current.play()
-      setIsPlaying(true)
+      console.log("Starting audio playback for message:", messageId);
+      console.log("Audio URL length:", audioUrl.length);
+      
+      if (isPlaying && currentPlayingMessageId === messageId) {
+        console.log("Stopping current playback");
+        handleStopAudio();
+        return;
+      }
+      
+      // Stop any currently playing audio
+      handleStopAudio();
+      
+      audioRef.current.src = audioUrl;
+      audioRef.current.load();
+      
+      console.log("Attempting to play audio...");
+      audioRef.current.play().then(() => {
+        console.log("Audio playback started successfully");
+        setIsPlaying(true);
+        setCurrentPlayingMessageId(messageId);
+      }).catch(error => {
+        console.error("Error playing audio:", error);
+        setIsPlaying(false);
+        setCurrentPlayingMessageId(null);
+      });
+    } else {
+      console.error("Audio element reference is null");
     }
   }
 
   const handleStopAudio = () => {
     if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      setIsPlaying(false)
+      console.log("Stopping audio playback");
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+      setCurrentPlayingMessageId(null);
     }
   }
 
@@ -185,17 +233,30 @@ export function AITutorPage() {
                         : "bg-muted rounded-tl-none text-left"
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap text-left">{message.content}</p>
-                    {!message.isUser && message.audioUrl && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="mt-2"
-                        onClick={() => isPlaying ? handleStopAudio() : handlePlayAudio(message.audioUrl!)}
-                      >
-                        {isPlaying ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                      </Button>
-                    )}
+                    <div className="flex justify-between items-start gap-2">
+                      <p className="text-sm whitespace-pre-wrap text-left flex-1">{message.content}</p>
+                      {!message.isUser && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="mt-0 flex-shrink-0 hover:bg-primary/10"
+                          onClick={() => {
+                            console.log("Audio URL:", message.audioUrl);
+                            if (message.audioUrl) {
+                              isPlaying && currentPlayingMessageId === index 
+                                ? handleStopAudio() 
+                                : handlePlayAudio(message.audioUrl, index);
+                            }
+                          }}
+                        >
+                          {isPlaying && currentPlayingMessageId === index ? (
+                            <VolumeX className="h-4 w-4" />
+                          ) : (
+                            <Mic className="h-4 w-4" />
+                          )}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                   {message.isUser && (
                     <Avatar className="h-8 w-8">
@@ -285,7 +346,14 @@ export function AITutorPage() {
         </DialogContent>
       </Dialog>
 
-      <audio ref={audioRef} onEnded={() => setIsPlaying(false)} />
+      <audio 
+        ref={audioRef} 
+        onEnded={() => setIsPlaying(false)}
+        onError={(e) => {
+          console.error("Audio error:", e);
+          setIsPlaying(false);
+        }}
+      />
     </div>
   )
 } 
