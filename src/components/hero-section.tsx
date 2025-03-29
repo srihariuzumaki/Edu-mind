@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button"
-
+import Spline from '@splinetool/react-spline'
 
 export function HeroSection() {
-  
-
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-background to-slate-50 dark:from-background dark:to-slate-900/50">
       <div className="container px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
           <div className="flex flex-col justify-center space-y-4">
+            <div className="w-full h-[350px] mb-8">
+              <Spline scene="https://prod.spline.design/DCIGLjNkK1-ZsfER/scene.splinecode" />
+            </div>
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter text-foreground sm:text-5xl xl:text-6xl/none">
                 Learn Smarter with AI-Powered Education
