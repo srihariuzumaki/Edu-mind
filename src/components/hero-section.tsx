@@ -1,7 +1,20 @@
 import { Button } from "@/components/ui/button"
 import Spline from '@splinetool/react-spline'
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/lib/auth"
 
 export function HeroSection() {
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
+
+  const handleDashboardClick = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard')
+    } else {
+      navigate('/login')
+    }
+  }
+
   return (
     <section className="w-full py-8 md:py-16 lg:py-24 xl:py-32 bg-gradient-to-b from-background to-slate-50 dark:from-background dark:to-slate-900/50">
       <div className="container px-4 md:px-6">
@@ -20,15 +33,12 @@ export function HeroSection() {
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg" className="px-8">  
-                Get Started
+              <Button size="lg" className="px-8" onClick={handleDashboardClick}>  
+                Go to Dashboard
               </Button>
-              <a
-                href="#"
-                className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-              >
+              <Button size="lg" variant="outline" className="px-8">
                 Learn More
-              </a>
+              </Button>
             </div>
           </div>
           <div className="flex items-center justify-center">
