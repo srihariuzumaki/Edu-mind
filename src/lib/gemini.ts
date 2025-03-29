@@ -41,52 +41,57 @@ Important Formatting Guidelines:
 
 export async function getAIResponse(message: string, chatHistory: Array<{ role: string; content: string }>) {
   try {
-    // Log API key (first few characters only)
-    console.log("API Key present:", !!import.meta.env.VITE_GEMINI_API_KEY)
-    console.log("API Key format:", import.meta.env.VITE_GEMINI_API_KEY?.startsWith('AIza'))
+    // Enhanced logging
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    console.log("API Key length:", apiKey?.length);
+    console.log("API Key first 10 chars:", apiKey?.substring(0, 10));
+    
+    if (!apiKey) {
+      throw new Error("Gemini API key is missing");
+    }
 
     // Format the conversation history
     const history = chatHistory.map(msg => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.content }]
-    }))
+    }));
 
     // Create the content array
     const contents = [
-      {
-        role: "user",
-        parts: [{ text: SYSTEM_PROMPT }]
-      },
+      { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
       ...history,
-      {
-        role: "user",
-        parts: [{ text: message }]
-      }
-    ]
+      { role: "user", parts: [{ text: message }] }
+    ];
 
-    console.log("Request contents:", JSON.stringify(contents, null, 2))
-
-    // Generate response
+    console.log("Sending request to Gemini API...");
+    
+    // Generate response with simpler content first
     const result = await model.generateContent({
-      contents: contents,
+      contents,
       generationConfig: {
         temperature: 0.7,
         topK: 40,
         topP: 0.95,
         maxOutputTokens: 1024,
       }
-    })
+    });
 
-    console.log("Response received:", result)
-    const response = await result.response
-    return response.text()
+    console.log("Response received from Gemini");
+    const response = await result.response;
+    const responseText = response.text();
+    console.log("Response text length:", responseText.length);
+    
+    return responseText;
+
   } catch (error) {
-    console.error("Error getting AI response:", error)
+    console.error("Detailed error in getAIResponse:");
     if (error instanceof Error) {
-      console.error("Error details:", error.message)
-      console.error("Error stack:", error.stack)
-      console.error("Error name:", error.name)
+      console.error("Error name:", error.name);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    } else {
+      console.error("Unknown error type:", error);
     }
-    return "I apologize, but I'm having trouble processing your request right now. Please try again in a moment."
+    return "I apologize, but I'm having trouble processing your request right now. Please try again in a moment.";
   }
 } 

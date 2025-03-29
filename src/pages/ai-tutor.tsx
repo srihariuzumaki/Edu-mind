@@ -2,11 +2,12 @@ import { useState, useRef, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { SendHorizontal } from "lucide-react"
+import { SendHorizontal, Volume2, VolumeX } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { getAIResponse } from "@/lib/gemini"
 import { useAuth } from "@/lib/auth"
 import { useNavigate } from "react-router-dom"
+import { textToSpeech, SUPPORTED_LANGUAGES, SPEAKERS, type TextToSpeechOptions } from "@/lib/sarvam"
 import {
   Dialog,
   DialogContent,
@@ -15,11 +16,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Message {
   content: string
   isUser: boolean
   timestamp: Date
+  audioUrl?: string
 }
 
 export function AITutorPage() {
@@ -35,7 +44,11 @@ export function AITutorPage() {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
+  const [selectedLanguage, setSelectedLanguage] = useState("en-IN")
+  const [selectedSpeaker, setSelectedSpeaker] = useState("meera")
+  const [isPlaying, setIsPlaying] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   // Count user messages (excluding the initial greeting)
   const userMessageCount = messages.filter(msg => msg.isUser).length
@@ -83,10 +96,26 @@ export function AITutorPage() {
       // Get AI response
       const aiResponse = await getAIResponse(input, chatHistory)
 
+      let audioUrl: string | undefined;
+      
+      // Try to convert to speech, but don't block the AI response if it fails
+      try {
+        const audioOptions: TextToSpeechOptions = {
+          targetLanguageCode: selectedLanguage,
+          speaker: selectedSpeaker,
+        }
+        const audioBase64 = await textToSpeech(aiResponse, audioOptions)
+        audioUrl = `data:audio/wav;base64,${audioBase64}`
+      } catch (error) {
+        console.error("Text-to-speech conversion failed:", error)
+        // Don't throw the error, just continue without audio
+      }
+
       const aiMessage: Message = {
         content: aiResponse,
         isUser: false,
         timestamp: new Date(),
+        audioUrl, // This will be undefined if text-to-speech failed
       }
 
       setMessages((prev) => [...prev, aiMessage])
@@ -100,6 +129,22 @@ export function AITutorPage() {
       setMessages((prev) => [...prev, errorMessage])
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handlePlayAudio = (audioUrl: string) => {
+    if (audioRef.current) {
+      audioRef.current.src = audioUrl
+      audioRef.current.play()
+      setIsPlaying(true)
+    }
+  }
+
+  const handleStopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setIsPlaying(false)
     }
   }
 
@@ -141,6 +186,16 @@ export function AITutorPage() {
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap text-left">{message.content}</p>
+                    {!message.isUser && message.audioUrl && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="mt-2"
+                        onClick={() => isPlaying ? handleStopAudio() : handlePlayAudio(message.audioUrl!)}
+                      >
+                        {isPlaying ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                      </Button>
+                    )}
                   </div>
                   {message.isUser && (
                     <Avatar className="h-8 w-8">
@@ -153,6 +208,32 @@ export function AITutorPage() {
             </CardContent>
             <CardFooter className="p-4 border-t">
               <div className="flex w-full items-center gap-2">
+                <div className="flex gap-2">
+                  <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SUPPORTED_LANGUAGES.map((lang) => (
+                        <SelectItem key={lang.code} value={lang.code}>
+                          {lang.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={selectedSpeaker} onValueChange={setSelectedSpeaker}>
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue placeholder="Speaker" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SPEAKERS.map((speaker) => (
+                        <SelectItem key={speaker.id} value={speaker.id}>
+                          {speaker.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <input
                   type="text"
                   value={input}
@@ -203,6 +284,8 @@ export function AITutorPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <audio ref={audioRef} onEnded={() => setIsPlaying(false)} />
     </div>
   )
 } 
