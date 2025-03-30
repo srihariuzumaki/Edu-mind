@@ -102,6 +102,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Srihari Kulkarni  - srihariamit@gmail.com
 
-Project Link: [https://github.com/yourusername/edu-mind](https://github.com/yourusername/edu-mind)
+Project Link: [https://github.com/srihariuzumaki/edu-mind](https://github.com/srihariuzumaki/edu-mind)
