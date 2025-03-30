@@ -46,12 +46,15 @@ export function MainNav() {
             EduMind
           </span>
         </a>
-        {!isAITutorPage && !isProfilePage && !isAdminPage && (
-          <nav className="hidden md:flex gap-6">
-            <a href="#" className="text-sm font-medium transition-colors hover:text-primary">
-              Features
-            </a>
-          </nav>
+        {!isAITutorPage && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => navigate('/ai-tutor')}
+            className="hidden md:flex items-center gap-2 bg-black text-white hover:bg-gray-800"
+          >
+            Try AI Tutor
+          </Button>
         )}
       </div>
       <div className="hidden md:flex items-center gap-4">

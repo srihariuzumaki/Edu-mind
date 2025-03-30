@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Link, useSearchParams, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -33,9 +34,31 @@ const mockOverview = {
 }
 
 export function Dashboard() {
+  const [searchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState("overview")
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const { theme, setTheme } = useTheme()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const section = searchParams.get('section')
+    if (section) {
+      switch (section) {
+        case 'courses':
+          setActiveTab('courses')
+          break
+        case 'adaptive':
+        case 'progress':
+        case 'community':
+        case 'gamification':
+        case 'language':
+          setActiveTab('overview')
+          break
+        default:
+          setActiveTab('overview')
+      }
+    }
+  }, [searchParams])
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -55,7 +78,17 @@ export function Dashboard() {
                 <Menu className="h-6 w-6" />
               )}
             </Button>
-            <h1 className="text-xl font-bold">EduMind</h1>
+            <Link to="/" className="text-xl font-bold hover:text-primary transition-colors">
+              EduMind
+            </Link>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate('/ai-tutor')}
+              className="hidden md:flex items-center gap-2 bg-black text-white hover:bg-gray-800"
+            >
+              Try AI Tutor
+            </Button>
           </div>
           
           <div className="flex items-center gap-2">
@@ -85,7 +118,9 @@ export function Dashboard() {
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-40 w-64 transform bg-card shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-16 items-center justify-between border-b px-4">
-          <h2 className="text-lg font-semibold">EduMind</h2>
+          <Link to="/" className="text-lg font-semibold hover:text-primary transition-colors">
+            EduMind
+          </Link>
           <Button 
             variant="ghost" 
             size="icon" 

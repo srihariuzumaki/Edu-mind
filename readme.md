@@ -1,54 +1,107 @@
-# React + TypeScript + Vite
+# EduMind - AI-Powered Learning Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+EduMind is a modern, AI-powered learning platform that combines cutting-edge technology with intuitive design to create an engaging educational experience. The platform features an AI tutor, interactive 3D elements, and a user-friendly interface.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🤖 AI Tutor: Interactive AI-powered tutoring system
+- 🎨 Modern UI: Clean and responsive design with dark/light mode support
+- 👤 User Authentication: Secure login and registration system
+- 🎮 Interactive 3D Elements: Engaging 3D models using Spline
+- 📱 Responsive Design: Mobile-first approach with adaptive layouts
+- 🔒 Secure Authentication: Firebase-based user management
+- 🎯 Personalized Learning: AI-driven content recommendations
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Frontend
+- **React 18**: Modern UI framework
+- **TypeScript**: Type-safe JavaScript
+- **Vite**: Fast build tool and development server
+- **TailwindCSS**: Utility-first CSS framework
+- **Radix UI**: Unstyled, accessible components
+- **React Router DOM**: Client-side routing
+- **Spline**: 3D web experiences
+- **Google Generative AI**: AI-powered tutoring system
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Backend & Services
+- **Firebase**: Authentication and backend services
+- **Axios**: HTTP client for API requests
+
+### Development Tools
+- **ESLint**: Code linting
+- **PostCSS**: CSS processing
+- **TypeScript**: Static type checking
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/edu-mind.git
+cd edu-mind
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
 ```
+
+3. Create a `.env` file in the root directory and add your environment variables:
+```env
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+```
+
+4. Start the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+## Project Structure
+
+```
+edu-mind/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── lib/           # Utility functions and configurations
+│   ├── pages/         # Page components
+│   └── styles/        # Global styles
+├── public/            # Static assets
+└── app/              # Application core
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [Spline](https://spline.design/) for 3D assets and interactions
+- [Firebase](https://firebase.google.com/) for authentication and backend services
+- [Google AI](https://ai.google.dev/) for AI capabilities
+- [Radix UI](https://www.radix-ui.com/) for accessible components
+- [TailwindCSS](https://tailwindcss.com/) for styling
+
+## Contact
+
+Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+
+Project Link: [https://github.com/yourusername/edu-mind](https://github.com/yourusername/edu-mind)

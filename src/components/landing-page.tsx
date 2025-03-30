@@ -10,6 +10,10 @@ import { useNavigate } from "react-router-dom"
 export function LandingPage() {
   const navigate = useNavigate()
 
+  const handleFeatureClick = (section: string) => {
+    navigate(`/dashboard?section=${section}`)
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -19,7 +23,7 @@ export function LandingPage() {
         <HeroSection />
 
         {/* Features Section */}
-        <section className="container py-12 md:py-24 lg:py-32">
+        <section id="features" className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
             <h2 className="text-3xl font-bold leading-[1.1] tracking-tighter text-foreground sm:text-3xl md:text-5xl">
               Personalized Learning Experience
@@ -30,36 +34,66 @@ export function LandingPage() {
           </div>
 
           <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3 lg:gap-8 mt-8">
-            <FeatureCard
-              icon={<Brain className="h-6 w-6 text-primary" />}
-              title="Adaptive Learning"
-              description="Content that adjusts to your knowledge level and learning pace"
-            />
-            <FeatureCard
-              icon={<BookOpen className="h-6 w-6 text-primary" />}
-              title="Comprehensive Lessons"
-              description="Well-structured content across various subjects and difficulty levels"
-            />
-            <FeatureCard
-              icon={<BarChart className="h-6 w-6 text-primary" />}
-              title="Progress Tracking"
-              description="Visualize your learning journey with detailed analytics"
-            />
-            <FeatureCard
-              icon={<Users className="h-6 w-6 text-primary" />}
-              title="Community Learning"
-              description="Connect with peers and learn collaboratively"
-            />
-            <FeatureCard
-              icon={<Award className="h-6 w-6 text-primary" />}
-              title="Gamification"
-              description="Earn rewards and achievements as you progress"
-            />
-            <FeatureCard
-              icon={<Globe className="h-6 w-6 text-primary" />}
-              title="Multilingual Support"
-              description="Learn in your preferred language with our localization options"
-            />
+            <div 
+              onClick={() => handleFeatureClick('adaptive')}
+              className="cursor-pointer transition-transform hover:scale-105"
+            >
+              <FeatureCard
+                icon={<Brain className="h-6 w-6 text-primary" />}
+                title="Adaptive Learning"
+                description="Content that adjusts to your knowledge level and learning pace"
+              />
+            </div>
+            <div 
+              onClick={() => handleFeatureClick('courses')}
+              className="cursor-pointer transition-transform hover:scale-105"
+            >
+              <FeatureCard
+                icon={<BookOpen className="h-6 w-6 text-primary" />}
+                title="Comprehensive Lessons"
+                description="Well-structured content across various subjects and difficulty levels"
+              />
+            </div>
+            <div 
+              onClick={() => handleFeatureClick('progress')}
+              className="cursor-pointer transition-transform hover:scale-105"
+            >
+              <FeatureCard
+                icon={<BarChart className="h-6 w-6 text-primary" />}
+                title="Progress Tracking"
+                description="Visualize your learning journey with detailed analytics"
+              />
+            </div>
+            <div 
+              onClick={() => handleFeatureClick('community')}
+              className="cursor-pointer transition-transform hover:scale-105"
+            >
+              <FeatureCard
+                icon={<Users className="h-6 w-6 text-primary" />}
+                title="Community Learning"
+                description="Connect with peers and learn collaboratively"
+              />
+            </div>
+            <div 
+              onClick={() => handleFeatureClick('gamification')}
+              className="cursor-pointer transition-transform hover:scale-105"
+            >
+              <FeatureCard
+                icon={<Award className="h-6 w-6 text-primary" />}
+                title="Gamification"
+                description="Earn rewards and achievements as you progress"
+              />
+            </div>
+            <div 
+              onClick={() => handleFeatureClick('language')}
+              className="cursor-pointer transition-transform hover:scale-105"
+            >
+              <FeatureCard
+                icon={<Globe className="h-6 w-6 text-primary" />}
+                title="Multilingual Support"
+                description="Learn in your preferred language with our localization options"
+              />
+            </div>
           </div>
         </section>
 
