@@ -28,7 +28,7 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Login to EduMind</CardTitle>
+          <CardTitle>Login to Vocal-Mind</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

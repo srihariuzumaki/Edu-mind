@@ -12,7 +12,7 @@ export function AITutorPreview() {
           <AvatarFallback className="bg-primary/20 text-primary">AI</AvatarFallback>
         </Avatar>
         <div>
-          <h3 className="font-semibold">EduMind AI Tutor</h3>
+          <h3 className="font-semibold">Vocal-Mind AI Tutor</h3>
           <p className="text-xs text-muted-foreground">Always here to help</p>
         </div>
       </CardHeader>

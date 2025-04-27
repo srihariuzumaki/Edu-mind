@@ -21,7 +21,7 @@ import {
 
 export function SystemSettings() {
   const [activeTab, setActiveTab] = useState("general")
-  const [siteName, setSiteName] = useState("EduMind")
+  const [siteName, setSiteName] = useState("Vocal-Mind")
   const [siteDescription, setSiteDescription] = useState("AI-Powered Learning Platform")
   const [defaultLanguage, setDefaultLanguage] = useState("en")
   const [enableRegistration, setEnableRegistration] = useState(true)

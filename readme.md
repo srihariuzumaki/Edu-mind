@@ -1,6 +1,6 @@
-# EduMind - AI-Powered Learning Platform
+# Vocal-Mind - AI-Powered Learning Platform
 
-EduMind is a modern, AI-powered learning platform that combines cutting-edge technology with intuitive design to create an engaging educational experience. The platform features an AI tutor, interactive 3D elements, and a user-friendly interface.
+Vocal-Mind is a modern, AI-powered learning platform that combines cutting-edge technology with intuitive design to create an engaging educational experience. The platform features an AI tutor, interactive 3D elements, and a user-friendly interface.
 
 ## Features
 
@@ -15,6 +15,7 @@ EduMind is a modern, AI-powered learning platform that combines cutting-edge tec
 ## Tech Stack
 
 ### Frontend
+
 - **React 18**: Modern UI framework
 - **TypeScript**: Type-safe JavaScript
 - **Vite**: Fast build tool and development server
@@ -25,10 +26,12 @@ EduMind is a modern, AI-powered learning platform that combines cutting-edge tec
 - **Google Generative AI**: AI-powered tutoring system
 
 ### Backend & Services
+
 - **Firebase**: Authentication and backend services
 - **Axios**: HTTP client for API requests
 
 ### Development Tools
+
 - **ESLint**: Code linting
 - **PostCSS**: CSS processing
 - **TypeScript**: Static type checking
@@ -36,18 +39,21 @@ EduMind is a modern, AI-powered learning platform that combines cutting-edge tec
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - npm or yarn
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/edu-mind.git
 cd edu-mind
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -55,12 +61,14 @@ yarn install
 ```
 
 3. Create a `.env` file in the root directory and add your environment variables:
+
 ```env
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 # or
@@ -102,6 +110,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Srihari Kulkarni  - srihariamit@gmail.com
+Srihari Kulkarni - srihariamit@gmail.com
 
 Project Link: [https://github.com/srihariuzumaki/edu-mind](https://github.com/srihariuzumaki/edu-mind)

@@ -79,7 +79,7 @@ export function Dashboard() {
               )}
             </Button>
             <Link to="/" className="text-xl font-bold hover:text-primary transition-colors">
-              EduMind
+              Vocal-Mind
             </Link>
             <Button 
               variant="outline" 
@@ -119,7 +119,7 @@ export function Dashboard() {
       <div className={`fixed inset-y-0 left-0 z-40 w-64 transform bg-card shadow-lg transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-16 items-center justify-between border-b px-4">
           <Link to="/" className="text-lg font-semibold hover:text-primary transition-colors">
-            EduMind
+            Vocal-Mind
           </Link>
           <Button 
             variant="ghost" 

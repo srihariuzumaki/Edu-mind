@@ -28,7 +28,7 @@ export function HeroSection() {
                 Learn Smarter with AI-Powered Education
               </h1>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                EduMind adapts to your learning style, providing personalized content and AI tutoring to help you
+                Vocal-Mind adapts to your learning style, providing personalized content and AI tutoring to help you
                 achieve your educational goals.
               </p>
             </div>

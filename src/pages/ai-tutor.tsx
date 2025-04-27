@@ -48,8 +48,9 @@ export function AITutorPage() {
   const [selectedSpeaker, setSelectedSpeaker] = useState("meera")
   const [isPlaying, setIsPlaying] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const [currentPlayingMessageId, setCurrentPlayingMessageId] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [currentPlayingMessageId, setCurrentPlayingMessageId] = useState<number | null>(null)
+  const [audioUrls, setAudioUrls] = useState<Map<number, string>>(new Map())
 
   // Count user messages (excluding the initial greeting)
   const userMessageCount = messages.filter(msg => msg.isUser).length
@@ -117,12 +118,8 @@ export function AITutorPage() {
         }
         console.log("TTS Options:", audioOptions);
         
-        const audioBase64 = await textToSpeech(aiResponse, audioOptions)
-        console.log("Received audio base64 data length:", audioBase64?.length);
-        console.log("First 50 chars of audio data:", audioBase64?.substring(0, 50) + "...");
-        
-        audioUrl = `data:audio/wav;base64,${audioBase64}`
-        console.log("Audio URL created successfully");
+        audioUrl = await textToSpeech(aiResponse, audioOptions)
+        console.log("Received audio URL:", audioUrl);
       } catch (error) {
         console.error("Text-to-speech conversion failed:", error);
         if (error instanceof Error) {
@@ -154,11 +151,28 @@ export function AITutorPage() {
     }
   }
 
-  const handlePlayAudio = (audioUrl: string, messageId: number) => {
-    if (audioRef.current) {
+  // Cleanup function for audio URLs
+  const cleanupAudioUrl = (messageId: number) => {
+    const url = audioUrls.get(messageId);
+    if (url?.startsWith('blob:')) {
+      URL.revokeObjectURL(url);
+      const newAudioUrls = new Map(audioUrls);
+      newAudioUrls.delete(messageId);
+      setAudioUrls(newAudioUrls);
+    }
+  };
+
+  // Handle audio playback
+  const handlePlayAudio = async (audioUrl: string, messageId: number) => {
+    if (!audioRef.current) {
+      console.error("Audio element reference is null");
+      return;
+    }
+
+    try {
       console.log("Starting audio playback for message:", messageId);
-      console.log("Audio URL length:", audioUrl.length);
       
+      // If the same audio is playing, stop it
       if (isPlaying && currentPlayingMessageId === messageId) {
         console.log("Stopping current playback");
         handleStopAudio();
@@ -167,34 +181,70 @@ export function AITutorPage() {
       
       // Stop any currently playing audio
       handleStopAudio();
+
+      // Store the URL in state if not already stored
+      if (!audioUrls.has(messageId)) {
+        setAudioUrls(prev => new Map(prev).set(messageId, audioUrl));
+      }
       
+      // Set up audio element
       audioRef.current.src = audioUrl;
       audioRef.current.load();
       
       console.log("Attempting to play audio...");
-      audioRef.current.play().then(() => {
-        console.log("Audio playback started successfully");
-        setIsPlaying(true);
-        setCurrentPlayingMessageId(messageId);
-      }).catch(error => {
-        console.error("Error playing audio:", error);
-        setIsPlaying(false);
-        setCurrentPlayingMessageId(null);
-      });
-    } else {
-      console.error("Audio element reference is null");
-    }
-  }
-
-  const handleStopAudio = () => {
-    if (audioRef.current) {
-      console.log("Stopping audio playback");
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      await audioRef.current.play();
+      console.log("Audio playback started successfully");
+      setIsPlaying(true);
+      setCurrentPlayingMessageId(messageId);
+    } catch (error) {
+      console.error("Error playing audio:", error);
       setIsPlaying(false);
       setCurrentPlayingMessageId(null);
+      
+      // If there's an error with the URL, clean it up and try to regenerate
+      cleanupAudioUrl(messageId);
     }
-  }
+  };
+
+  // Handle stopping audio
+  const handleStopAudio = () => {
+    if (!audioRef.current) return;
+    
+    console.log("Stopping audio playback");
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    setIsPlaying(false);
+    setCurrentPlayingMessageId(null);
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      // Cleanup all audio URLs
+      audioUrls.forEach((url, messageId) => {
+        cleanupAudioUrl(messageId);
+      });
+    };
+  }, []);
+
+  // Handle audio ended event
+  const handleAudioEnded = () => {
+    console.log("Audio playback completed");
+    setIsPlaying(false);
+    setCurrentPlayingMessageId(null);
+  };
+
+  // Handle audio error event
+  const handleAudioError = (e: React.SyntheticEvent<HTMLAudioElement, Event>) => {
+    console.error("Audio playback error:", e);
+    setIsPlaying(false);
+    setCurrentPlayingMessageId(null);
+    
+    // If there's an error, cleanup the URL for the current message
+    if (currentPlayingMessageId !== null) {
+      cleanupAudioUrl(currentPlayingMessageId);
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -211,7 +261,7 @@ export function AITutorPage() {
                 <AvatarFallback className="bg-primary/20 text-primary">AI</AvatarFallback>
               </Avatar>
               <div>
-                <h3 className="font-semibold">EduMind AI Tutor</h3>
+                <h3 className="font-semibold">Vocal-Mind AI Tutor</h3>
                 <p className="text-xs text-muted-foreground">Always here to help</p>
               </div>
             </CardHeader>
@@ -349,12 +399,12 @@ export function AITutorPage() {
       </Dialog>
 
       <audio 
-        ref={audioRef} 
-        onEnded={() => setIsPlaying(false)}
-        onError={(e) => {
-          console.error("Audio error:", e);
-          setIsPlaying(false);
-        }}
+        ref={audioRef}
+        onEnded={handleAudioEnded}
+        onError={handleAudioError}
+        // Add these additional attributes for better browser support
+        preload="auto"
+        crossOrigin="anonymous"
       />
     </div>
   )

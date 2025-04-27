@@ -29,7 +29,7 @@ export function LandingPage() {
               Personalized Learning Experience
             </h2>
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-              EduMind adapts to your learning style and pace, providing a tailored educational journey
+              Vocal-Mind adapts to your learning style and pace, providing a tailored educational journey
             </p>
           </div>
 
@@ -133,7 +133,7 @@ export function LandingPage() {
               Ready to Transform Your Learning?
             </h2>
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-              Join thousands of students who have accelerated their education with EduMind
+              Join thousands of students who have accelerated their education with Vocal-Mind
             </p>
             <div className="flex flex-col gap-2 min-[400px]:flex-row mt-6">
               <Button size="lg" className="px-8">

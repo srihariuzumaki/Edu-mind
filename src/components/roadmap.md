@@ -1,8 +1,8 @@
-# Project Roadmap: EduMind
+# Project Roadmap: Vocal-Mind
 
 ## Project Overview
 
-**EduMind** is an AI-driven educational platform designed to provide personalized learning experiences. By integrating adaptive learning techniques, AI tutoring, and engagement tracking, EduMind aims to enhance student outcomes through tailored content delivery and interactive support.
+**Vocal-Mind** is an AI-driven educational platform designed to provide personalized learning experiences. By integrating adaptive learning techniques, AI tutoring, and engagement tracking, Vocal-Mind aims to enhance student outcomes through tailored content delivery and interactive support.
 
 ## Tech Stack
 
@@ -16,10 +16,12 @@
 ### Phase 1: Project Setup and Initial Configuration
 
 1. **Initialize the Frontend:**
+
    - Set up a new React project using Create React App.&#8203;:contentReference[oaicite:3]{index=3}
    - :contentReference[oaicite:4]{index=4}&#8203;:contentReference[oaicite:5]{index=5}
 
 2. **Configure Firebase:**
+
    - :contentReference[oaicite:6]{index=6}&#8203;:contentReference[oaicite:7]{index=7}
    - :contentReference[oaicite:8]{index=8}&#8203;:contentReference[oaicite:9]{index=9}
    - :contentReference[oaicite:10]{index=10}&#8203;:contentReference[oaicite:11]{index=11}
@@ -32,10 +34,12 @@
 ### Phase 2: Develop Core Features
 
 1. **Adaptive Learning Engine:**
+
    - :contentReference[oaicite:18]{index=18}&#8203;:contentReference[oaicite:19]{index=19}
    - :contentReference[oaicite:20]{index=20}&#8203;:contentReference[oaicite:21]{index=21}
 
 2. **AI Tutor Chatbot:**
+
    - :contentReference[oaicite:22]{index=22}&#8203;:contentReference[oaicite:23]{index=23}
    - :contentReference[oaicite:24]{index=24}&#8203;:contentReference[oaicite:25]{index=25}
 
@@ -46,10 +50,12 @@
 ### Phase 3: User Interface and Experience
 
 1. **Design UI Components:**
+
    - :contentReference[oaicite:30]{index=30}&#8203;:contentReference[oaicite:31]{index=31}
    - :contentReference[oaicite:32]{index=32}&#8203;:contentReference[oaicite:33]{index=33}
 
 2. **Implement Navigation:**
+
    - :contentReference[oaicite:34]{index=34}&#8203;:contentReference[oaicite:35]{index=35}
    - :contentReference[oaicite:36]{index=36}&#8203;:contentReference[oaicite:37]{index=37}
 
@@ -60,10 +66,12 @@
 ### Phase 4: Integration and Testing
 
 1. **Connect Frontend with Backend:**
+
    - :contentReference[oaicite:42]{index=42}&#8203;:contentReference[oaicite:43]{index=43}
    - :contentReference[oaicite:44]{index=44}&#8203;:contentReference[oaicite:45]{index=45}
 
 2. **Implement State Management:**
+
    - :contentReference[oaicite:46]{index=46}&#8203;:contentReference[oaicite:47]{index=47}
    - :contentReference[oaicite:48]{index=48}&#8203;:contentReference[oaicite:49]{index=49}
 
@@ -75,10 +83,12 @@
 ### Phase 5: Deployment and Monitoring
 
 1. **Deploy the Application:**
+
    - :contentReference[oaicite:56]{index=56}&#8203;:contentReference[oaicite:57]{index=57}
    - :contentReference[oaicite:58]{index=58}&#8203;:contentReference[oaicite:59]{index=59}
 
 2. **Monitor Performance:**
+
    - :contentReference[oaicite:60]{index=60}&#8203;:contentReference[oaicite:61]{index=61}
    - :contentReference[oaicite:62]{index=62}&#8203;:contentReference[oaicite:63]{index=63}
 
@@ -89,35 +99,41 @@
 ## Features to Add Step by Step
 
 1. **User Authentication:**
+
    - :contentReference[oaicite:68]{index=68}&#8203;:contentReference[oaicite:69]{index=69}
    - :contentReference[oaicite:70]{index=70}&#8203;:contentReference[oaicite:71]{index=71}
 
 2. **Lesson Content Management:**
+
    - :contentReference[oaicite:72]{index=72}&#8203;:contentReference[oaicite:73]{index=73}
    - :contentReference[oaicite:74]{index=74}&#8203;:contentReference[oaicite:75]{index=75}
 
 3. **Quiz System:**
+
    - :contentReference[oaicite:76]{index=76}&#8203;:contentReference[oaicite:77]{index=77}
    - :contentReference[oaicite:78]{index=78}&#8203;:contentReference[oaicite:79]{index=79}
 
 4. **Progress Tracking:**
+
    - :contentReference[oaicite:80]{index=80}&#8203;:contentReference[oaicite:81]{index=81}
    - :contentReference[oaicite:82]{index=82}&#8203;:contentReference[oaicite:83]{index=83}
 
 5. **Gamification Elements:**
+
    - :contentReference[oaicite:84]{index=84}&#8203;:contentReference[oaicite:85]{index=85}
    - :contentReference[oaicite:86]{index=86}&#8203;:contentReference[oaicite:87]{index=87}
 
 6. **Community Features:**
+
    - :contentReference[oaicite:88]{index=88}&#8203;:contentReference[oaicite:89]{index=89}
    - :contentReference[oaicite:90]{index=90}&#8203;:contentReference[oaicite:91]{index=91}
 
 7. **Accessibility Enhancements:**
+
    - :contentReference[oaicite:92]{index=92}&#8203;:contentReference[oaicite:93]{index=93}
    - :contentReference[oaicite:94]{index=94}&#8203;:contentReference[oaicite:95]{index=95}
 
 8. **Localization:**
    - :contentReference[oaicite:96]{index=96}&#8203;:contentReference[oaicite:97]{index=97}
    - Implement language selection options and translate content accordingly.
-::contentReference[oaicite:98]{index=98}
- 
+     ::contentReference[oaicite:98]{index=98}

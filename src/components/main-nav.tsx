@@ -43,7 +43,7 @@ export function MainNav() {
       <div className="flex items-center gap-6 md:gap-10">
         <a href="/" className="flex items-center space-x-2">
           <span className="font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-500">
-            EduMind
+            Vocal-Mind
           </span>
         </a>
         {!isAITutorPage && (
