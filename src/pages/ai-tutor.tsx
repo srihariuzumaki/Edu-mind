@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { SendHorizontal, VolumeX, Mic } from "lucide-react"
 import { MainNav } from "@/components/main-nav"
 import { getAIResponse } from "@/lib/gemini"
+import { analyzeMessage } from "@/lib/ml-service"
 import { useAuth } from "@/lib/auth"
 import { useNavigate } from "react-router-dom"
 import { textToSpeech, SUPPORTED_LANGUAGES, SPEAKERS, type TextToSpeechOptions } from "@/lib/sarvam"
@@ -29,6 +30,9 @@ interface Message {
   isUser: boolean
   timestamp: Date
   audioUrl?: string
+  sentiment?: string
+  intent?: string
+  contextScore?: number
 }
 
 export function AITutorPage() {
@@ -51,6 +55,7 @@ export function AITutorPage() {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [currentPlayingMessageId, setCurrentPlayingMessageId] = useState<number | null>(null)
   const [audioUrls, setAudioUrls] = useState<Map<number, string>>(new Map())
+  const [mlEnabled, setMlEnabled] = useState(true)
 
   // Count user messages (excluding the initial greeting)
   const userMessageCount = messages.filter(msg => msg.isUser).length
@@ -91,7 +96,7 @@ export function AITutorPage() {
     try {
       // Convert messages to chat history format
       const chatHistory = messages.map(msg => ({
-        role: msg.isUser ? "user" : "model",
+        role: msg.isUser ? "user" as const : "model" as const,
         content: msg.content,
       }))
 
@@ -104,37 +109,36 @@ export function AITutorPage() {
       const aiResponse = await getAIResponse(`${languagePrompt} ${input}`, chatHistory)
 
       let audioUrl: string | undefined;
+      let mlAnalysis = null;
       
-      // Try to convert to speech, but don't block the AI response if it fails
+      // Analyze message with ML service if enabled
+      if (mlEnabled) {
+        try {
+          mlAnalysis = await analyzeMessage(aiResponse, chatHistory);
+        } catch (error) {
+          console.error("ML analysis failed:", error);
+        }
+      }
+      
+      // Try to convert to speech
       try {
-        console.log("Starting text-to-speech conversion...");
-        console.log("Selected language:", selectedLanguage);
-        console.log("Selected speaker:", selectedSpeaker);
-        console.log("Text to convert:", aiResponse);
-        
         const audioOptions: TextToSpeechOptions = {
           targetLanguageCode: selectedLanguage,
           speaker: selectedSpeaker,
         }
-        console.log("TTS Options:", audioOptions);
-        
-        audioUrl = await textToSpeech(aiResponse, audioOptions)
-        console.log("Received audio URL:", audioUrl);
+        audioUrl = await textToSpeech(mlAnalysis?.enhanced_response || aiResponse, audioOptions)
       } catch (error) {
-        console.error("Text-to-speech conversion failed:", error);
-        if (error instanceof Error) {
-          console.error("Error details:", error.message);
-          console.error("Error stack:", error.stack);
-        }
-        // Don't throw the error, just continue without audio
+        console.error("Text-to-speech conversion failed:", error)
       }
 
-      console.log("Creating AI message with audio URL:", audioUrl ? "present" : "absent");
       const aiMessage: Message = {
-        content: aiResponse,
+        content: mlAnalysis?.enhanced_response || aiResponse,
         isUser: false,
         timestamp: new Date(),
         audioUrl,
+        sentiment: mlAnalysis?.sentiment,
+        intent: mlAnalysis?.intent,
+        contextScore: mlAnalysis?.context_score
       }
 
       setMessages((prev) => [...prev, aiMessage])
@@ -253,7 +257,18 @@ export function AITutorPage() {
       </header>
       <main className="flex-1 flex items-center justify-center py-4">
         <div className="container max-w-4xl h-[calc(100vh-4rem)]">
-          <h1 className="text-3xl font-bold mb-4 text-center">AI Tutor</h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-3xl font-bold text-center">AI Tutor</h1>
+            <div className="flex items-center gap-2">
+              <label className="text-sm">ML Features</label>
+              <input
+                type="checkbox"
+                checked={mlEnabled}
+                onChange={(e) => setMlEnabled(e.target.checked)}
+                className="toggle"
+              />
+            </div>
+          </div>
           <Card className="w-full border-2 h-[calc(100%-4rem)] flex flex-col">
             <CardHeader className="flex flex-row items-center gap-4 p-4 border-b">
               <Avatar className="h-10 w-10">
@@ -285,19 +300,25 @@ export function AITutorPage() {
                     }`}
                   >
                     <div className="flex justify-between items-start gap-2">
-                      <p className="text-sm whitespace-pre-wrap text-left flex-1">{message.content}</p>
-                      {!message.isUser && (
+                      <div className="flex-1">
+                        <p className="text-sm whitespace-pre-wrap text-left">{message.content}</p>
+                        {!message.isUser && message.sentiment && (
+                          <div className="mt-2 text-xs opacity-70">
+                            <span className="mr-2">Sentiment: {message.sentiment}</span>
+                            <span className="mr-2">Intent: {message.intent}</span>
+                            <span>Context: {Math.round(message.contextScore! * 100)}%</span>
+                          </div>
+                        )}
+                      </div>
+                      {!message.isUser && message.audioUrl && (
                         <Button
                           variant="ghost"
                           size="sm"
                           className="mt-0 flex-shrink-0 bg-black dark:bg-white hover:bg-black/80 dark:hover:bg-white/80"
                           onClick={() => {
-                            console.log("Audio URL:", message.audioUrl);
-                            if (message.audioUrl) {
-                              isPlaying && currentPlayingMessageId === index 
-                                ? handleStopAudio() 
-                                : handlePlayAudio(message.audioUrl, index);
-                            }
+                            isPlaying && currentPlayingMessageId === index 
+                              ? handleStopAudio() 
+                              : handlePlayAudio(message.audioUrl!, index);
                           }}
                         >
                           {isPlaying && currentPlayingMessageId === index ? (
